@@ -11,35 +11,30 @@ const resetCanvas = (canvas, bgColor, cellSpacing) => {
   canvas.style.border = `${cellSpacing}px solid ${bgColor}`;
 };
 
-const paintCells = (canvas, input, gridSize, color, spacing) => {
+const paintCells = (canvas, activeCells, gridSize, color, spacing) => {
   const ctx = canvas.getContext("2d");
   const cellW = canvas.width / gridSize;
   const cellH = canvas.height / gridSize;
 
   ctx.fillStyle = color;
-  for (let row = 0; row < input.length; row++) {
-    for (let col = 0; col < input[0].length; col++) {
-      // update this so we only process the "on" cells,
-      // no need to iterate through the others
-      if (input[row][col]) {
-        ctx.fillRect(
-          cellW * col + spacing,
-          cellH * row + spacing,
-          cellW - 2 * spacing,
-          cellH - 2 * spacing
-        );
-      }
-    }
+  for (let cell of activeCells) {
+    const [col, row] = cell.split("-");
+    ctx.fillRect(
+      cellW * col + spacing,
+      cellH * row + spacing,
+      cellW - 2 * spacing,
+      cellH - 2 * spacing
+    );
   }
 };
 
-const drawScene = (options, input) => {
+const drawScene = (options, activeCells) => {
   const { canvas, gridSize, backgroundColor, cellColor, cellSpacing } = options;
   resetCanvas(canvas, backgroundColor, cellSpacing);
-  paintCells(canvas, input, gridSize, cellColor, cellSpacing);
+  paintCells(canvas, activeCells, gridSize, cellColor, cellSpacing);
 };
 
-const countNeighbours = (grid, cellX, cellY) => {
+const countNeighbours = (activeCells, gridSize, x, y) => {
   const neighbours = [
     [-1, -1],
     [0, -1],
@@ -52,25 +47,22 @@ const countNeighbours = (grid, cellX, cellY) => {
   ];
   let count = 0;
   for (const n of neighbours) {
-    const [nX, nY] = [cellX + n[0], cellY + n[1]];
-    if (nX < 0 || nX >= grid[0].length || nY < 0 || nY >= grid.length) continue;
-    if (grid[nY][nX]) count += 1;
+    const [nX, nY] = [x + n[0], y + n[1]];
+    if (nX < 0 || nX >= gridSize || nY < 0 || nY >= gridSize) continue;
+    if (activeCells.has(`${nX}-${nY}`)) count += 1;
   }
   return count;
 };
 
-const nextInput = (input) => {
-  let result = Array(input.length)
-    .fill()
-    .map(() => Array(input[0].length).fill(0));
+const nextActiveCells = (activeCells, gridSize) => {
+  let result = new Set();
 
-  for (let y = 0; y < input.length; y++) {
-    for (let x = 0; x < input[0].length; x++) {
-      const neighbours = countNeighbours(input, x, y);
-      if (input[y][x] === 1) {
-        result[y][x] = [2, 3].includes(neighbours) ? 1 : 0;
-      } else if (neighbours === 3) {
-        result[y][x] = 1;
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
+      const liveCell = activeCells.has(`${x}-${y}`);
+      const neighbours = countNeighbours(activeCells, gridSize, x, y);
+      if ((liveCell && [2, 3].includes(neighbours)) || neighbours === 3) {
+        result.add(`${x}-${y}`);
       }
     }
   }
@@ -78,33 +70,27 @@ const nextInput = (input) => {
 };
 
 const play = (options) => {
-  const { cellColor, speed } = options;
-  let { input } = options;
+  const { gridSize, cellColor, speed } = options;
+  let { activeCells } = options;
   const delay = Math.max(1000 / speed, 100);
 
   initPage(cellColor);
-  drawScene(options, input);
+  drawScene(options, activeCells);
 
   setInterval(() => {
-    input = nextInput(input);
-    drawScene(options, input);
+    activeCells = nextActiveCells(activeCells, gridSize);
+    drawScene(options, activeCells);
   }, delay);
 };
 
 const options = {
   canvas: document.querySelector("canvas#grid"),
-  gridSize: 5, // the number of cells across and down
+  gridSize: 5, // the number of cells across and down (assumes a square grid)
   cellSpacing: 3, // spacing in pixels around each cell
   cellColor: "black",
   backgroundColor: "white",
   speed: 1, // setting from 1-10
-  input: [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-  ],
+  activeCells: new Set(["1-2", "2-2", "3-2"]),
 };
 
 play(options);

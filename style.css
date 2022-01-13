@@ -3,5 +3,14 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
+  grid-template-rows: 1fr min-content;
   place-items: center;
+}
+
+#controls {
+  padding: 2rem;
+}
+
+button {
+  font-size: inherit;
 }

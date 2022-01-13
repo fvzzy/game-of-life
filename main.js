@@ -1,39 +1,32 @@
 /* presentation */
 
-const resizeCanvas = (canvas, cellSize) => {
+const resizeCanvas = (canvas) => {
   const { clientWidth, clientHeight } = document.documentElement;
-  const controlsEl = document.getElementById("controls");
-  canvas.width = Math.floor(clientWidth / cellSize) * cellSize;
-  canvas.height =
-    Math.floor((clientHeight - controlsEl.clientHeight) / cellSize) * cellSize;
+  canvas.width = Math.floor(clientWidth / state.cellSize) * state.cellSize;
+  canvas.height = Math.floor(clientHeight / state.cellSize) * state.cellSize;
 };
 
-const resetCanvas = (canvas, backgroundColor) => {
+const resetCanvas = (canvas) => {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = backgroundColor;
+  ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-const fillCells = (canvas, cells, size, color, margin) => {
+const fillCells = (canvas, cells, size, color) => {
   const ctx = canvas.getContext("2d");
 
   ctx.fillStyle = color;
   for (let cell of cells) {
     const [col, row] = cell.split("-");
-    ctx.fillRect(
-      size * col + margin,
-      size * row + margin,
-      size - 2 * margin,
-      size - 2 * margin
-    );
+    ctx.fillRect(size * col + 1, size * row + 1, size - 2 * 1, size - 2 * 1);
   }
 };
 
 const drawScene = (options, cells) => {
-  const { canvas, backgroundColor, cellSize, cellColor, cellMargin } = options;
-  resetCanvas(canvas, backgroundColor, cellMargin);
-  fillCells(canvas, cells, cellSize, cellColor, cellMargin);
+  const { canvas } = options;
+  resetCanvas(canvas);
+  fillCells(canvas, cells, state.cellSize, state.cellColor);
 };
 
 /* game logic */
@@ -76,20 +69,20 @@ const nextCells = (cells, gridCols, gridRows) => {
 /* ui */
 
 const play = (options) => {
-  const { canvas, cellSize, speed } = options;
-  const delay = Math.max(1000 / speed, 100);
+  const { canvas } = options;
+  const delay = 500 / state.speed;
 
-  resizeCanvas(canvas, cellSize);
+  resizeCanvas(canvas, state.cellSize);
   drawScene(options, state.cells);
 
   state.interval = setInterval(() => step(options), delay);
 };
 
 const step = (options) => {
-  const { canvas, cellSize } = options;
+  const { canvas } = options;
   const [gridCols, gridRows] = [
-    canvas.width / cellSize,
-    canvas.height / cellSize,
+    canvas.width / state.cellSize,
+    canvas.height / state.cellSize,
   ];
 
   state.cells = nextCells(state.cells, gridCols, gridRows);
@@ -102,7 +95,14 @@ const stop = () => {
 };
 
 const bindControls = (options) => {
-  const { playBtn, pauseBtn, stepBtn } = options;
+  const {
+    playBtn,
+    pauseBtn,
+    stepBtn,
+    cellColorInput,
+    cellSizeInput,
+    speedInput,
+  } = options;
 
   playBtn.addEventListener("click", () => {
     if (state.interval) return;
@@ -117,9 +117,29 @@ const bindControls = (options) => {
     stop();
     play(options);
   });
+
+  // TODO: DRY up config control binding
+  cellColorInput.value = state.cellColor;
+  cellColorInput.addEventListener("input", (e) => {
+    state.cellColor = e.target.value;
+    drawScene(options, state.cells);
+  });
+
+  cellSizeInput.value = state.cellSizeInput;
+  cellSizeInput.addEventListener("input", (e) => {
+    state.cellSize = e.target.value;
+    drawScene(options, state.cells);
+  });
+
+  speedInput.value = state.speed;
+  speedInput.addEventListener("input", (e) => {
+    stop();
+    state.speed = e.target.value;
+    play(options);
+  });
 };
 
-const bindPaintbrush = (canvas, cellSize) => {
+const bindPaintbrush = (canvas) => {
   let dragging = false;
 
   canvas.addEventListener("mousedown", () => {
@@ -130,7 +150,9 @@ const bindPaintbrush = (canvas, cellSize) => {
   canvas.addEventListener("mousemove", (e) => {
     if (!dragging) return;
     const { x, y } = e;
-    state.cells.add(`${Math.floor(x / cellSize)}-${Math.floor(y / cellSize)}`);
+    state.cells.add(
+      `${Math.floor(x / state.cellSize)}-${Math.floor(y / state.cellSize)}`
+    );
     drawScene(options, state.cells);
   });
 
@@ -142,10 +164,10 @@ const bindPaintbrush = (canvas, cellSize) => {
 /* initialisation */
 
 const setup = (options) => {
-  const { canvas, cellSize } = options;
-  resizeCanvas(canvas, cellSize);
+  const { canvas } = options;
+  resizeCanvas(canvas, state.cellSize);
   step(options);
-  bindPaintbrush(canvas, cellSize);
+  bindPaintbrush(canvas);
   bindControls(options);
 };
 
@@ -154,6 +176,9 @@ const setup = (options) => {
 let state = {
   interval: null,
   cells: new Set(),
+  cellColor: "#000000",
+  cellSize: 10,
+  speed: 10,
 };
 
 const options = {
@@ -161,11 +186,9 @@ const options = {
   playBtn: document.querySelector("[data-btn-play]"),
   pauseBtn: document.querySelector("[data-btn-pause]"),
   stepBtn: document.querySelector("[data-btn-step]"),
-  cellSize: 20, // block size in pixels
-  cellMargin: 3, // margin in pixels around each cell
-  cellColor: "black",
-  backgroundColor: "white",
-  speed: 10, // setting from 1-10
+  cellColorInput: document.getElementById("cellColor"),
+  cellSizeInput: document.getElementById("cellSize"),
+  speedInput: document.getElementById("speed"),
 };
 
 setup(options);

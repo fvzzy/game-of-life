@@ -1,16 +1,31 @@
 body {
-  display: grid;
   height: 100vh;
   margin: 0;
   padding: 0;
-  grid-template-rows: 1fr min-content;
-  place-items: center;
+  font-family: Avenir, "sans-serif";
 }
 
-#controls {
-  padding: 2rem;
+#grid {
+  cursor: crosshair;
+}
+
+.controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.gameplay,
+.options {
+  margin: 2em;
+}
+
+.options label {
+  display: block;
+  margin-top: 0.5em;
 }
 
 button {
+  font-family: inherit;
   font-size: inherit;
 }

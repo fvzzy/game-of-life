@@ -5,6 +5,11 @@ body {
   font-family: Avenir, "sans-serif";
 }
 
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 #grid {
   cursor: crosshair;
 }
@@ -16,16 +21,17 @@ body {
 }
 
 .gameplay,
+.tools,
 .options {
   margin: 2em;
 }
 
+.tool,
 .options label {
   display: block;
   margin-top: 0.5em;
 }
 
-button {
-  font-family: inherit;
-  font-size: inherit;
+.tool input {
+  margin-left: 0;
 }

@@ -172,6 +172,20 @@ const bindPaintbrush = (canvas) => {
   canvas.addEventListener("mouseup", () => (dragging = false));
 };
 
+/* preconfigured inputs */
+
+const glider = [
+  [0, 0],
+  [1, 1],
+  [2, 1],
+  [2, 0],
+  [2, 1],
+];
+
+const addPattern = (x, y, pattern) => {
+  for (let [dX, dY] of pattern) state.cells.add(`${x + dX}-${y + dY}`);
+};
+
 /* initialisation */
 
 const initalise = (elements) => {

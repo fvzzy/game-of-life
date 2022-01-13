@@ -19,12 +19,18 @@ const fillCells = (canvas, cells, size, color) => {
   ctx.fillStyle = color;
   for (let cell of cells) {
     const [col, row] = cell.split("-");
-    ctx.fillRect(size * col + 1, size * row + 1, size - 2 * 1, size - 2 * 1);
+    const border = 1; // border in px around each cell
+    ctx.fillRect(
+      size * col + border,
+      size * row + border,
+      size - 2 * border,
+      size - 2 * border
+    );
   }
 };
 
-const drawScene = (options, cells) => {
-  const { canvas } = options;
+const drawScene = (elements, cells) => {
+  const { canvas } = elements;
   resetCanvas(canvas);
   fillCells(canvas, cells, state.cellSize, state.cellColor);
 };
@@ -68,25 +74,23 @@ const nextCells = (cells, gridCols, gridRows) => {
 
 /* ui */
 
-const play = (options) => {
-  const { canvas } = options;
+const play = (elements) => {
+  const { canvas } = elements;
   const delay = 500 / state.speed;
 
   resizeCanvas(canvas, state.cellSize);
-  drawScene(options, state.cells);
+  drawScene(elements, state.cells);
 
-  state.interval = setInterval(() => step(options), delay);
+  state.interval = setInterval(() => step(elements), delay);
 };
 
-const step = (options) => {
-  const { canvas } = options;
-  const [gridCols, gridRows] = [
-    canvas.width / state.cellSize,
-    canvas.height / state.cellSize,
-  ];
+const step = (elements) => {
+  const { canvas } = elements;
+  const gridCols = canvas.width / state.cellSize;
+  const gridRows = canvas.height / state.cellSize;
 
   state.cells = nextCells(state.cells, gridCols, gridRows);
-  drawScene(options, state.cells);
+  drawScene(elements, state.cells);
 };
 
 const stop = () => {
@@ -94,7 +98,7 @@ const stop = () => {
   state.interval = null;
 };
 
-const bindControls = (options) => {
+const bindControls = (elements) => {
   const {
     playBtn,
     pauseBtn,
@@ -102,40 +106,37 @@ const bindControls = (options) => {
     cellColorInput,
     cellSizeInput,
     speedInput,
-  } = options;
+  } = elements;
 
-  playBtn.addEventListener("click", () => {
-    if (state.interval) return;
-    play(options);
-  });
-
+  playBtn.addEventListener("click", () => !state.interval && play(elements));
+  stepBtn.addEventListener("click", () => step(elements));
   pauseBtn.addEventListener("click", () => stop());
-  stepBtn.addEventListener("click", () => step(options));
 
+  // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
     if (!state.interval) return stop();
     stop();
-    play(options);
+    play(elements);
   });
 
   // TODO: DRY up config control binding
   cellColorInput.value = state.cellColor;
   cellColorInput.addEventListener("input", (e) => {
     state.cellColor = e.target.value;
-    drawScene(options, state.cells);
+    drawScene(elements, state.cells);
   });
 
   cellSizeInput.value = state.cellSizeInput;
   cellSizeInput.addEventListener("input", (e) => {
     state.cellSize = e.target.value;
-    drawScene(options, state.cells);
+    drawScene(elements, state.cells);
   });
 
   speedInput.value = state.speed;
   speedInput.addEventListener("input", (e) => {
     stop();
     state.speed = e.target.value;
-    play(options);
+    play(elements);
   });
 };
 
@@ -153,22 +154,20 @@ const bindPaintbrush = (canvas) => {
     state.cells.add(
       `${Math.floor(x / state.cellSize)}-${Math.floor(y / state.cellSize)}`
     );
-    drawScene(options, state.cells);
+    drawScene(elements, state.cells);
   });
 
-  canvas.addEventListener("mouseup", () => {
-    dragging = false;
-  });
+  canvas.addEventListener("mouseup", () => (dragging = false));
 };
 
 /* initialisation */
 
-const setup = (options) => {
-  const { canvas } = options;
+const initalise = (elements) => {
+  const { canvas } = elements;
   resizeCanvas(canvas, state.cellSize);
-  step(options);
+  step(elements);
   bindPaintbrush(canvas);
-  bindControls(options);
+  bindControls(elements);
 };
 
 /* main */
@@ -181,7 +180,7 @@ let state = {
   speed: 10,
 };
 
-const options = {
+const elements = {
   canvas: document.getElementById("grid"),
   playBtn: document.querySelector("[data-btn-play]"),
   pauseBtn: document.querySelector("[data-btn-pause]"),
@@ -191,4 +190,4 @@ const options = {
   speedInput: document.getElementById("speed"),
 };
 
-setup(options);
+initalise(elements);

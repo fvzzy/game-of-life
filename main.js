@@ -1,3 +1,5 @@
+/* presentation */
+
 const resizeCanvas = (canvas, cellSize) => {
   const { clientWidth, clientHeight } = document.documentElement;
   const controlsEl = document.getElementById("controls");
@@ -13,7 +15,7 @@ const resetCanvas = (canvas, backgroundColor) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-const paintCells = (canvas, cells, size, color, margin) => {
+const fillCells = (canvas, cells, size, color, margin) => {
   const ctx = canvas.getContext("2d");
 
   ctx.fillStyle = color;
@@ -31,8 +33,10 @@ const paintCells = (canvas, cells, size, color, margin) => {
 const drawScene = (options, cells) => {
   const { canvas, backgroundColor, cellSize, cellColor, cellMargin } = options;
   resetCanvas(canvas, backgroundColor, cellMargin);
-  paintCells(canvas, cells, cellSize, cellColor, cellMargin);
+  fillCells(canvas, cells, cellSize, cellColor, cellMargin);
 };
+
+/* game logic */
 
 const countNeighbours = (cells, gridCols, gridRows, x, y) => {
   const neighbours = [
@@ -68,6 +72,8 @@ const nextCells = (cells, gridCols, gridRows) => {
   }
   return result;
 };
+
+/* ui */
 
 const play = (options) => {
   const { canvas, cellSize, speed } = options;
@@ -113,9 +119,41 @@ const bindControls = (options) => {
   });
 };
 
+const bindPaintbrush = (canvas, cellSize) => {
+  let dragging = false;
+
+  canvas.addEventListener("mousedown", () => {
+    stop();
+    dragging = true;
+  });
+
+  canvas.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    const { x, y } = e;
+    state.cells.add(`${Math.floor(x / cellSize)}-${Math.floor(y / cellSize)}`);
+    drawScene(options, state.cells);
+  });
+
+  canvas.addEventListener("mouseup", () => {
+    dragging = false;
+  });
+};
+
+/* initialisation */
+
+const setup = (options) => {
+  const { canvas, cellSize } = options;
+  resizeCanvas(canvas, cellSize);
+  step(options);
+  bindPaintbrush(canvas, cellSize);
+  bindControls(options);
+};
+
+/* main */
+
 let state = {
   interval: null,
-  cells: new Set(["2-1", "3-2", "1-3", "2-3", "3-3"]),
+  cells: new Set(),
 };
 
 const options = {
@@ -130,4 +168,4 @@ const options = {
   speed: 10, // setting from 1-10
 };
 
-bindControls(options);
+setup(options);

@@ -1,3 +1,11 @@
+/* utilities */
+
+const isEqualSet = (setA, setB) => {
+  if (setA.size !== setB.size) return false;
+  for (let el of setA) if (!setB.has(el)) return false;
+  return true;
+};
+
 /* presentation */
 
 const resizeCanvas = (canvas) => {
@@ -89,8 +97,12 @@ const step = (elements) => {
   const gridCols = canvas.width / state.cellSize;
   const gridRows = canvas.height / state.cellSize;
 
-  state.cells = nextCells(state.cells, gridCols, gridRows);
+  state.prevCells = state.cells;
+  state.cells = nextCells(state.prevCells, gridCols, gridRows);
   drawScene(elements, state.cells);
+
+  // kill the program if the game state has reached a standstill
+  if (isEqualSet(state.prevCells, state.cells)) stop();
 };
 
 const stop = () => {
@@ -174,6 +186,7 @@ const initalise = (elements) => {
 
 let state = {
   interval: null,
+  prevCells: null,
   cells: new Set(),
   cellColor: "#000000",
   cellSize: 10,

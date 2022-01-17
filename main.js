@@ -138,7 +138,7 @@ const bindControls = (elements) => {
     drawScene(elements, state.cells);
   });
 
-  cellSizeInput.value = state.cellSizeInput;
+  cellSizeInput.value = state.cellSize;
   cellSizeInput.addEventListener("input", (e) => {
     state.cellSize = e.target.value;
     drawScene(elements, state.cells);

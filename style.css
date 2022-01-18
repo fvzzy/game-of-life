@@ -21,7 +21,7 @@ button {
 }
 
 .gameplay,
-.tools,
+#tools,
 .options {
   margin: 2em;
 }

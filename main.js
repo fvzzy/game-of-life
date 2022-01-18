@@ -152,48 +152,99 @@ const bindControls = (elements) => {
   });
 };
 
-const bindPaintbrush = (canvas) => {
-  let dragging = false;
+/* tools */
 
-  canvas.addEventListener("mousedown", () => {
-    stop();
-    dragging = true;
+const addTools = (toolsEl) => {
+  tools.addEventListener("click", (e) => {
+    if (e.target.tagName !== "INPUT") return;
+    const selected = tools.querySelector("input:checked");
+    unbindCanvasHandlers(elements.canvas);
+    switch (selected.id) {
+      case "paintbrush":
+        bindPaintbrush(elements.canvas);
+        break;
+      case "box":
+        bindCanvasHandler(elements.canvas, "click", stampBox);
+        break;
+      case "glider":
+        bindCanvasHandler(elements.canvas, "click", stampGlider);
+        break;
+    }
   });
 
-  canvas.addEventListener("mousemove", (e) => {
-    if (!dragging) return;
-    const { x, y } = e;
-    state.cells.add(
-      `${Math.floor(x / state.cellSize)}-${Math.floor(y / state.cellSize)}`
-    );
-    drawScene(elements, state.cells);
-  });
-
-  canvas.addEventListener("mouseup", () => (dragging = false));
+  // preselect the first tool
+  tools.querySelector("input").click();
 };
 
-/* preconfigured inputs */
+const bindCanvasHandler = (canvas, event, handler) => {
+  canvas.addEventListener(event, handler);
+  state.canvasHandlers.set(event, handler);
+};
+
+const unbindCanvasHandlers = (canvas) => {
+  for (const [event, handler] of state.canvasHandlers) {
+    canvas.removeEventListener(event, handler);
+    state.canvasHandlers.delete(event);
+  }
+};
+
+const paintbrushEvents = new Map(
+  Object.entries({
+    mousedown: () => {
+      stop();
+      state.dragging = true;
+    },
+    mousemove: (e) => {
+      if (!state.dragging) return;
+      const x = Math.floor(e.x / state.cellSize);
+      const y = Math.floor(e.y / state.cellSize);
+      state.cells.add(`${x}-${y}`);
+      drawScene(elements, state.cells);
+    },
+    mouseup: () => (state.dragging = false),
+  })
+);
+
+const stampBox = (e) => stampPattern(e.x, e.y, box);
+const stampGlider = (e) => stampPattern(e.x, e.y, glider);
+
+const bindPaintbrush = (canvas) => {
+  for (const [event, handler] of paintbrushEvents) {
+    bindCanvasHandler(canvas, event, handler);
+  }
+};
+
+/* patterns */
+
+const box = [
+  [0, 0],
+  [0, 1],
+  [1, 0],
+  [1, 1],
+];
 
 const glider = [
   [0, 0],
   [1, 1],
-  [2, 1],
+  [1, 2],
   [2, 0],
   [2, 1],
 ];
 
-const addPattern = (x, y, pattern) => {
+const stampPattern = (mouseX, mouseY, pattern) => {
+  const x = Math.floor(mouseX / state.cellSize);
+  const y = Math.floor(mouseY / state.cellSize);
   for (let [dX, dY] of pattern) state.cells.add(`${x + dX}-${y + dY}`);
+  drawScene(elements, state.cells);
 };
 
 /* initialisation */
 
 const initalise = (elements) => {
-  const { canvas } = elements;
+  const { canvas, tools } = elements;
   resizeCanvas(canvas, state.cellSize);
-  step(elements);
-  bindPaintbrush(canvas);
   bindControls(elements);
+  addTools(tools);
 };
 
 /* main */
@@ -202,6 +253,8 @@ let state = {
   interval: null,
   prevCells: null,
   cells: new Set(),
+  canvasHandlers: new Map(),
+  dragging: false,
   cellColor: "#000000",
   cellSize: 10,
   speed: 10,
@@ -212,6 +265,7 @@ const elements = {
   playBtn: document.querySelector("[data-btn-play]"),
   pauseBtn: document.querySelector("[data-btn-pause]"),
   stepBtn: document.querySelector("[data-btn-step]"),
+  tools: document.getElementById("tools"),
   cellColorInput: document.getElementById("cellColor"),
   cellSizeInput: document.getElementById("cellSize"),
   speedInput: document.getElementById("speed"),

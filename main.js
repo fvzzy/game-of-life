@@ -110,26 +110,26 @@ const stop = () => {
   state.interval = null;
 };
 
-const bindControls = (elements) => {
-  const {
-    playBtn,
-    pauseBtn,
-    stepBtn,
-    cellColorInput,
-    cellSizeInput,
-    speedInput,
-  } = elements;
-
-  playBtn.addEventListener("click", () => !state.interval && play(elements));
-  stepBtn.addEventListener("click", () => step(elements));
-  pauseBtn.addEventListener("click", () => stop());
-
+const bindResizeHandler = (elements) => {
   // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
     if (!state.interval) return resizeCanvas(elements.canvas, state.cellSize);
     stop();
     play(elements);
   });
+};
+
+const bindGameplayControls = (elements) => {
+  const { playButton, pauseButton, stepButton } = elements;
+  playButton.addEventListener("click", () => !state.interval && play(elements));
+  stepButton.addEventListener("click", () => step(elements));
+  pauseButton.addEventListener("click", () => stop());
+};
+
+/* options */
+
+const bindOptionControls = (elements) => {
+  const { cellColorInput, cellSizeInput, speedInput } = elements;
 
   // TODO: DRY up config control binding
   cellColorInput.value = state.cellColor;
@@ -154,10 +154,25 @@ const bindControls = (elements) => {
 
 /* tools */
 
-const addTools = (toolsEl) => {
-  tools.addEventListener("click", (e) => {
+const addTools = (container, tools) => {
+  for (const toolId in tools) {
+    const { label } = tools[toolId];
+    const wrapperEl = document.createElement("span");
+    const inputEl = document.createElement("input");
+    const labelEl = document.createElement("labelEl");
+    wrapperEl.classList.add("tool");
+    inputEl.setAttribute("type", "radio");
+    inputEl.setAttribute("name", "tool");
+    inputEl.setAttribute("id", toolId);
+    labelEl.setAttribute("for", toolId);
+    labelEl.textContent = label;
+    wrapperEl.append(inputEl, label);
+    container.appendChild(wrapperEl);
+  }
+
+  container.addEventListener("click", (e) => {
     if (e.target.tagName !== "INPUT") return;
-    const selected = tools.querySelector("input:checked");
+    const selected = container.querySelector("input:checked");
     unbindCanvasHandlers(elements.canvas);
     switch (selected.id) {
       case "paintbrush":
@@ -173,7 +188,7 @@ const addTools = (toolsEl) => {
   });
 
   // preselect the first tool
-  tools.querySelector("input").click();
+  container.querySelector("input").click();
 };
 
 const bindCanvasHandler = (canvas, event, handler) => {
@@ -240,11 +255,19 @@ const stampPattern = (mouseX, mouseY, pattern) => {
 
 /* initialisation */
 
+const tools = {
+  paintbrush: { label: "Paintbrush" },
+  box: { label: "Box" },
+  glider: { label: "Glider" },
+};
+
 const initalise = (elements) => {
-  const { canvas, tools } = elements;
+  const { canvas, toolsContainer } = elements;
   resizeCanvas(canvas, state.cellSize);
-  bindControls(elements);
-  addTools(tools);
+  bindGameplayControls(elements);
+  bindOptionControls(elements);
+  bindResizeHandler(elements);
+  addTools(toolsContainer, tools);
 };
 
 /* main */
@@ -262,10 +285,10 @@ let state = {
 
 const elements = {
   canvas: document.getElementById("grid"),
-  playBtn: document.querySelector("[data-btn-play]"),
-  pauseBtn: document.querySelector("[data-btn-pause]"),
-  stepBtn: document.querySelector("[data-btn-step]"),
-  tools: document.getElementById("tools"),
+  playButton: document.querySelector("[data-btn-play]"),
+  pauseButton: document.querySelector("[data-btn-pause]"),
+  stepButton: document.querySelector("[data-btn-step]"),
+  toolsContainer: document.getElementById("tools"),
   cellColorInput: document.getElementById("cellColor"),
   cellSizeInput: document.getElementById("cellSize"),
   speedInput: document.getElementById("speed"),

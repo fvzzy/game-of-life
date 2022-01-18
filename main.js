@@ -126,7 +126,7 @@ const bindControls = (elements) => {
 
   // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
-    if (!state.interval) return stop();
+    if (!state.interval) return resizeCanvas(elements.canvas, state.cellSize);
     stop();
     play(elements);
   });

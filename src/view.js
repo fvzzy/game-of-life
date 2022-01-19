@@ -1,10 +1,10 @@
 import { state } from "../main.js";
 import { play, stop } from "./input/gameplay.js";
 
-export const resizeCanvas = (canvas) => {
+export const resizeCanvas = (canvas, cellSize) => {
   const { clientWidth, clientHeight } = document.documentElement;
-  canvas.width = Math.floor(clientWidth / state.cellSize) * state.cellSize;
-  canvas.height = Math.floor(clientHeight / state.cellSize) * state.cellSize;
+  canvas.width = Math.floor(clientWidth / cellSize) * cellSize;
+  canvas.height = Math.floor(clientHeight / cellSize) * cellSize;
 };
 
 const resetCanvas = (canvas) => {

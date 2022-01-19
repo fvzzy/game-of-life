@@ -39,8 +39,12 @@ export const drawScene = (elements, cells) => {
 export const bindResizeHandler = (elements) => {
   // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
-    if (!state.interval) return resizeCanvas(elements.canvas, state.cellSize);
-    stop();
-    play(elements);
+    if (!state.interval) {
+      resizeCanvas(elements.canvas, state.cellSize);
+      drawScene(elements, state.cells);
+    } else {
+      stop();
+      play(elements);
+    }
   });
 };

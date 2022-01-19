@@ -65,7 +65,6 @@ export const state = new Store({
   prevCells: null,
   cells: new Set(),
   canvasHandlers: new Map(),
-  dragging: false,
   cellColor: "#000000",
   cellSize: 10,
   speed: 10,

@@ -3,6 +3,7 @@ export default function ({
   prevCells,
   cells,
   canvasHandlers,
+  paused,
   dragging,
   cellColor,
   cellSize,
@@ -12,6 +13,7 @@ export default function ({
   this.prevCells = prevCells;
   this.cells = cells;
   this.canvasHandlers = canvasHandlers;
+  this.paused = paused;
   this.dragging = dragging;
   this.cellColor = cellColor;
   this.cellSize = cellSize;

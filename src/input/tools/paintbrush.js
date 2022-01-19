@@ -1,9 +1,12 @@
 import { state } from "../../../main.js";
-import { stop } from "../gameplay.js";
+import { play, stop } from "../gameplay.js";
 import { drawScene } from "../../view.js";
 
 export const paintbrushDown = () => {
-  stop();
+  if (state.interval) {
+    stop();
+    state.paused = true;
+  }
   state.dragging = true;
 };
 
@@ -15,4 +18,10 @@ export const paintbrushMove = (elements, e) => {
   drawScene(elements, state.cells);
 };
 
-export const paintbrushUp = () => (state.dragging = false);
+export const paintbrushUp = (elements) => {
+  if (state.paused) {
+    play(elements);
+    state.paused = false;
+  }
+  state.dragging = false;
+};

@@ -1,4 +1,5 @@
 import { state } from "../../../main.js";
+import { stop } from "../gameplay.js";
 import { drawScene } from "../../view.js";
 
 export const paintbrushDown = () => {

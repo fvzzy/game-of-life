@@ -14,15 +14,19 @@
         <button data-btn-pause>Pause</button>
         <button data-btn-step>Step</button>
       </div>
-      <div id="tools">Tool Selection</div>
-      <div class="options">
+      <fieldset id="tools">
+        <legend>Tool Selection</legend>
+      </fieldset>
+      <fieldset class="settings">
+        <legend>Settings</legend>
+        <!-- TODO: generate settings dynamically -->
         <label for="speed">Speed</label>
         <input type="range" id="speed" min="1" max="10" step="0.1" />
         <label for="cellSize">Cell Size</label>
         <input type="range" id="cellSize" min="5" max="30" step="5" />
         <label for="cellColor">Cell Colour</label>
         <input type="color" id="cellColor" />
-      </div>
+      </fieldset>
     </div>
     <script type="module" src="/main.js"></script>
   </body>

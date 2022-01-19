@@ -2,7 +2,7 @@ import Store from "./src/state/Store.js";
 import elements from "./src/config/elements.js";
 import { resizeCanvas, bindResizeHandler } from "./src/view.js";
 import { bindGameplayControls } from "./src/input/gameplay.js";
-import { bindOptionControls } from "./src/input/options.js";
+import { bindOptionControls } from "./src/input/settings.js";
 import { addTools } from "./src/input/tools.js";
 import {
   paintbrushDown,

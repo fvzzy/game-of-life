@@ -9,10 +9,17 @@ import {
   paintbrushMove,
   paintbrushUp,
 } from "./src/input/tools/paintbrush.js";
-import { stampBox, stampGlider } from "./src/input/tools/stamps.js";
+import {
+  stampBlock,
+  stampBlinker,
+  stampGlider,
+  stampLWSS,
+  stampMWSS,
+  stampHWSS,
+} from "./src/input/tools/stamps.js";
 
 const tools = {
-  // TODO: add a util to forward elements
+  // TODO: add a util to forward elements and DRY this up
   paintbrush: {
     label: "Paintbrush",
     handlers: {
@@ -21,10 +28,16 @@ const tools = {
       pointerup: (e) => paintbrushUp(elements, e),
     },
   },
-  box: {
-    label: "Box",
+  block: {
+    label: "Block",
     handlers: {
-      click: (e) => stampBox(elements, e),
+      click: (e) => stampBlock(elements, e),
+    },
+  },
+  blinker: {
+    label: "Blinker",
+    handlers: {
+      click: (e) => stampBlinker(elements, e),
     },
   },
   glider: {
@@ -32,6 +45,18 @@ const tools = {
     handlers: {
       click: (e) => stampGlider(elements, e),
     },
+  },
+  lwss: {
+    label: "Light Spaceship",
+    handlers: { click: (e) => stampLWSS(elements, e) },
+  },
+  mwss: {
+    label: "Mid Spaceship",
+    handlers: { click: (e) => stampMWSS(elements, e) },
+  },
+  hwss: {
+    label: "Heavy Spaceship",
+    handlers: { click: (e) => stampHWSS(elements, e) },
   },
 };
 

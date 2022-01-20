@@ -2,7 +2,7 @@ import Store from "./src/state/Store.js";
 import elements from "./src/config/elements.js";
 import { resizeCanvas, bindResizeHandler } from "./src/view.js";
 import { bindGameplayControls } from "./src/input/gameplay.js";
-import { bindOptionControls } from "./src/input/settings.js";
+import { bindSettingsControls } from "./src/input/settings.js";
 import { addTools } from "./src/input/tools.js";
 import { loadControls } from "./src/input/controls.js";
 import {
@@ -75,7 +75,7 @@ export const state = new Store({
 const initalise = (elements) => {
   resizeCanvas(elements.canvas, state.cellSize);
   bindGameplayControls(elements);
-  bindOptionControls(elements);
+  bindSettingsControls(elements);
   bindResizeHandler(elements);
   addTools(elements, tools);
   loadControls();

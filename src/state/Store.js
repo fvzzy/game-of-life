@@ -7,6 +7,7 @@ export default function ({
   paused,
   dragging,
   color,
+  randomiseColors,
   cellSize,
   speed,
 }) {
@@ -18,6 +19,7 @@ export default function ({
   this.paused = paused;
   this.dragging = dragging;
   this.color = color;
+  this.randomiseColors = randomiseColors;
   this.cellSize = cellSize;
   this.speed = speed;
 }

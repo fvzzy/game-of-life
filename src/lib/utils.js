@@ -34,3 +34,8 @@ export const blendHexColours = (...hexColors) => {
 
   return rgbToHexStr(averageRgbValues);
 };
+
+const randomRgbVal = () => Math.floor(Math.random() * 256);
+
+export const randomHexColor = () =>
+  rgbToHexStr([randomRgbVal(), randomRgbVal(), randomRgbVal()]);

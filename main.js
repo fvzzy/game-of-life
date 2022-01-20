@@ -68,6 +68,7 @@ export const state = new Store({
   cellColors: new Map(),
   canvasHandlers: new Map(),
   color: "#000000",
+  randomiseColors: true,
   cellSize: 10,
   speed: 10,
 });

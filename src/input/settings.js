@@ -13,14 +13,8 @@ const updateSpeedAndRestart = (elements, e) => {
   play(elements);
 };
 
-export const bindOptionControls = (elements) => {
-  const { colorInput, cellSizeInput, speedInput } = elements;
-
-  // TODO: move this into tools
-  colorInput.value = state.color;
-  colorInput.addEventListener("input", (e) =>
-    updateSettingAndRedraw("color", elements, e)
-  );
+export const bindSettingsControls = (elements) => {
+  const { cellSizeInput, speedInput, randomiseColorsInput } = elements;
 
   cellSizeInput.value = state.cellSize;
   cellSizeInput.addEventListener("input", (e) =>
@@ -30,5 +24,11 @@ export const bindOptionControls = (elements) => {
   speedInput.value = state.speed;
   speedInput.addEventListener("input", (e) =>
     updateSpeedAndRestart(elements, e)
+  );
+
+  randomiseColorsInput.checked = state.randomiseColors;
+  randomiseColorsInput.addEventListener(
+    "input",
+    (e) => (state.randomiseColors = e.target.checked)
   );
 };

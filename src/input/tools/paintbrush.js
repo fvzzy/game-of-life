@@ -1,28 +1,27 @@
-import { state } from "../../../main.js";
 import { play, stop } from "../gameplay.js";
 import { drawScene } from "../../view.js";
 
-export const paintbrushDown = () => {
+export const paintbrushDown = (elements, state, e) => {
   if (state.interval) {
-    stop();
+    stop(state);
     state.paused = true;
   }
   state.dragging = true;
 };
 
-export const paintbrushMove = (elements, e) => {
+export const paintbrushMove = (elements, state, e) => {
   if (!state.dragging) return;
   const x = Math.floor(e.x / state.cellSize);
   const y = Math.floor(e.y / state.cellSize);
   const cell = `${x}-${y}`;
   state.cells.add(cell);
   state.cellColors.set(cell, state.color);
-  drawScene(elements, state.cells, state.cellColors);
+  drawScene(elements, state);
 };
 
-export const paintbrushUp = (elements) => {
+export const paintbrushUp = (elements, state, e) => {
   if (state.paused) {
-    play(elements);
+    play(elements, state);
     state.paused = false;
   }
   state.dragging = false;

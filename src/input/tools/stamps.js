@@ -1,7 +1,6 @@
-import { state } from "../../../main.js";
 import { drawScene } from "../../view.js";
 
-const stampPattern = (elements, { x: mouseX, y: mouseY }, pattern) => {
+const stampPattern = (elements, state, { x: mouseX, y: mouseY }, pattern) => {
   const x = Math.floor(mouseX / state.cellSize);
   const y = Math.floor(mouseY / state.cellSize);
   for (let [dX, dY] of pattern) {
@@ -9,7 +8,7 @@ const stampPattern = (elements, { x: mouseX, y: mouseY }, pattern) => {
     state.cells.add(cell);
     state.cellColors.set(cell, state.color);
   }
-  drawScene(elements, state.cells, state.cellColors);
+  drawScene(elements, state);
 };
 
 export const stampBlock = (...args) =>

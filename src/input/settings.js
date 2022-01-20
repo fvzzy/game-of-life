@@ -1,29 +1,28 @@
-import { state } from "../../main.js";
 import { drawScene } from "../view.js";
 import { play, stop } from "./gameplay.js";
 
-const updateSettingAndRedraw = (option, elements, e) => {
+const updateSettingAndRedraw = (option, elements, state, e) => {
   state[option] = e.target.value;
-  drawScene(elements, state.cells, state.cellColors);
+  drawScene(elements, state);
 };
 
-const updateSpeedAndRestart = (elements, e) => {
-  stop();
+const updateSpeedAndRestart = (elements, state, e) => {
+  stop(state);
   state.speed = e.target.value;
-  play(elements);
+  play(elements, state);
 };
 
-export const bindSettingsControls = (elements) => {
+export const bindSettingsControls = (elements, state) => {
   const { cellSizeInput, speedInput, randomiseColorsInput } = elements;
 
   cellSizeInput.value = state.cellSize;
   cellSizeInput.addEventListener("input", (e) =>
-    updateSettingAndRedraw("cellSize", elements, e)
+    updateSettingAndRedraw("cellSize", elements, state, e)
   );
 
   speedInput.value = state.speed;
   speedInput.addEventListener("input", (e) =>
-    updateSpeedAndRestart(elements, e)
+    updateSpeedAndRestart(elements, state, e)
   );
 
   randomiseColorsInput.checked = state.randomiseColors;

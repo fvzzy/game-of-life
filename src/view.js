@@ -1,4 +1,3 @@
-import { state } from "../main.js";
 import { play, stop } from "./input/gameplay.js";
 
 export const resizeCanvas = (canvas, cellSize) => {
@@ -30,21 +29,21 @@ const fillCells = (canvas, cells, colors, size) => {
   }
 };
 
-export const drawScene = (elements, cells, colors) => {
+export const drawScene = (elements, state) => {
   const { canvas } = elements;
   resetCanvas(canvas);
-  fillCells(canvas, cells, colors, state.cellSize);
+  fillCells(canvas, state.cells, state.cellColors, state.cellSize);
 };
 
-export const bindResizeHandler = (elements) => {
+export const bindResizeHandler = (elements, state) => {
   // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
     if (!state.interval) {
       resizeCanvas(elements.canvas, state.cellSize);
-      drawScene(elements, state.cells, state.cellColors);
+      drawScene(elements, state);
     } else {
-      stop();
-      play(elements);
+      stop(state);
+      play(elements, state);
     }
   });
 };

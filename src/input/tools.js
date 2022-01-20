@@ -1,12 +1,11 @@
-import { state } from "../../main.js";
 import { randomHexColor } from "../lib/utils.js";
 
-const bindTool = (canvas, event, handler) => {
+const bindTool = (canvas, state, event, handler) => {
   canvas.addEventListener(event, handler);
   state.canvasHandlers.set(event, handler);
 };
 
-const unbindTools = (canvas) => {
+const unbindTools = (canvas, state) => {
   for (const [event, handler] of state.canvasHandlers) {
     canvas.removeEventListener(event, handler);
     state.canvasHandlers.delete(event);
@@ -27,16 +26,16 @@ const createToolGroupEl = (toolId, label) => {
   return wrapperEl;
 };
 
-const randomiseColor = (elements) => {
+const randomiseColor = (elements, state) => {
   if (!state.randomiseColors) return;
   state.color = randomHexColor();
   elements.colorInput.value = state.color;
 };
 
-export const addTools = (elements, tools) => {
+export const addTools = (elements, state, toolsConfig) => {
   const { canvas, colorInput, toolsContainer } = elements;
-  for (const toolId in tools) {
-    const { label } = tools[toolId];
+  for (const toolId in toolsConfig) {
+    const { label } = toolsConfig[toolId];
     const toolGroupEl = createToolGroupEl(toolId, label);
     toolsContainer.appendChild(toolGroupEl);
   }
@@ -44,11 +43,11 @@ export const addTools = (elements, tools) => {
   toolsContainer.addEventListener("click", (e) => {
     if (e.target.tagName !== "INPUT") return;
     const selected = toolsContainer.querySelector("input:checked");
-    const { handlers } = tools[selected.id];
-    unbindTools(canvas);
-    randomiseColor(elements);
+    const { handlers } = toolsConfig[selected.id];
+    unbindTools(canvas, state);
+    randomiseColor(elements, state);
     for (const [event, handler] of Object.entries(handlers)) {
-      bindTool(canvas, event, handler);
+      bindTool(canvas, state, event, handler);
     }
   });
 

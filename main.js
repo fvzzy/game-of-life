@@ -19,49 +19,46 @@ import {
   stampHWSS,
 } from "./src/input/tools/stamps.js";
 
-const tools = {
-  // TODO: add a util to forward elements and DRY this up
-  paintbrush: {
-    label: "Paintbrush",
-    handlers: {
-      pointerdown: (e) => paintbrushDown(elements, e),
-      pointermove: (e) => paintbrushMove(elements, e),
-      pointerup: (e) => paintbrushUp(elements, e),
+const toolsConfig = (elements, state) => {
+  const withState = (fn, e) => fn(elements, state, e);
+
+  return {
+    paintbrush: {
+      label: "Paintbrush",
+      handlers: {
+        pointerdown: (e) => withState(paintbrushDown, e),
+        pointermove: (e) => withState(paintbrushMove, e),
+        pointerup: (e) => withState(paintbrushUp, e),
+      },
     },
-  },
-  block: {
-    label: "Block",
-    handlers: {
-      click: (e) => stampBlock(elements, e),
+    block: {
+      label: "Block",
+      handlers: { click: (e) => withState(stampBlock, e) },
     },
-  },
-  blinker: {
-    label: "Blinker",
-    handlers: {
-      click: (e) => stampBlinker(elements, e),
+    blinker: {
+      label: "Blinker",
+      handlers: { click: (e) => withState(stampBlinker, e) },
     },
-  },
-  glider: {
-    label: "Glider",
-    handlers: {
-      click: (e) => stampGlider(elements, e),
+    glider: {
+      label: "Glider",
+      handlers: { click: (e) => withState(stampGlider, e) },
     },
-  },
-  lwss: {
-    label: "Light Spaceship",
-    handlers: { click: (e) => stampLWSS(elements, e) },
-  },
-  mwss: {
-    label: "Mid Spaceship",
-    handlers: { click: (e) => stampMWSS(elements, e) },
-  },
-  hwss: {
-    label: "Heavy Spaceship",
-    handlers: { click: (e) => stampHWSS(elements, e) },
-  },
+    lwss: {
+      label: "Light Spaceship",
+      handlers: { click: (e) => withState(stampLWSS, e) },
+    },
+    mwss: {
+      label: "Mid Spaceship",
+      handlers: { click: (e) => withState(stampMWSS, e) },
+    },
+    hwss: {
+      label: "Heavy Spaceship",
+      handlers: { click: (e) => withState(stampHWSS, e) },
+    },
+  };
 };
 
-export const state = new Store({
+const state = new Store({
   interval: null,
   prevCells: null,
   cells: new Set(),
@@ -73,13 +70,13 @@ export const state = new Store({
   speed: 10,
 });
 
-const initalise = (elements) => {
+const initalise = (elements, state) => {
   resizeCanvas(elements.canvas, state.cellSize);
-  bindGameplayControls(elements);
-  bindSettingsControls(elements);
-  bindResizeHandler(elements);
-  addTools(elements, tools);
+  bindGameplayControls(elements, state);
+  bindSettingsControls(elements, state);
+  bindResizeHandler(elements, state);
+  addTools(elements, state, toolsConfig(elements, state));
   loadControls();
 };
 
-initalise(elements);
+initalise(elements, state);

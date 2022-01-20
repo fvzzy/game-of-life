@@ -1,6 +1,6 @@
 import { state } from "../../main.js";
 import { isEqualSet } from "../lib/utils.js";
-import { nextCells } from "../rules.js";
+import { nextCells, nextCellColors } from "../rules.js";
 import { resizeCanvas, drawScene } from "../view.js";
 
 export const play = (elements) => {
@@ -8,7 +8,7 @@ export const play = (elements) => {
   const delay = 500 / state.speed;
 
   resizeCanvas(canvas, state.cellSize);
-  drawScene(elements, state.cells);
+  drawScene(elements, state.cells, state.cellColors);
 
   state.interval = setInterval(() => step(elements), delay);
 };
@@ -20,7 +20,8 @@ export const step = (elements) => {
 
   state.prevCells = state.cells;
   state.cells = nextCells(state.prevCells, gridCols, gridRows);
-  drawScene(elements, state.cells);
+  state.cellColors = nextCellColors(state.cells, state.cellColors);
+  drawScene(elements, state.cells, state.cellColors);
 
   // kill the program if the game state has reached a standstill
   if (isEqualSet(state.prevCells, state.cells)) stop();

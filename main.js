@@ -65,8 +65,9 @@ export const state = new Store({
   interval: null,
   prevCells: null,
   cells: new Set(),
+  cellColors: new Map(),
   canvasHandlers: new Map(),
-  cellColor: "#000000",
+  color: "#000000",
   cellSize: 10,
   speed: 10,
 });

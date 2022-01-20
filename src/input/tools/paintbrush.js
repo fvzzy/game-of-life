@@ -14,8 +14,10 @@ export const paintbrushMove = (elements, e) => {
   if (!state.dragging) return;
   const x = Math.floor(e.x / state.cellSize);
   const y = Math.floor(e.y / state.cellSize);
-  state.cells.add(`${x}-${y}`);
-  drawScene(elements, state.cells);
+  const cell = `${x}-${y}`;
+  state.cells.add(cell);
+  state.cellColors.set(cell, state.color);
+  drawScene(elements, state.cells, state.cellColors);
 };
 
 export const paintbrushUp = (elements) => {

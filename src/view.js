@@ -14,12 +14,12 @@ const resetCanvas = (canvas) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-const fillCells = (canvas, cells, size, color) => {
+const fillCells = (canvas, cells, colors, size) => {
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = color;
   for (let cell of cells) {
     const [col, row] = cell.split("-");
+    ctx.fillStyle = colors.get(cell);
     const border = 1; // border in px around each cell
     ctx.fillRect(
       size * col + border,
@@ -30,10 +30,10 @@ const fillCells = (canvas, cells, size, color) => {
   }
 };
 
-export const drawScene = (elements, cells) => {
+export const drawScene = (elements, cells, colors) => {
   const { canvas } = elements;
   resetCanvas(canvas);
-  fillCells(canvas, cells, state.cellSize, state.cellColor);
+  fillCells(canvas, cells, colors, state.cellSize);
 };
 
 export const bindResizeHandler = (elements) => {
@@ -41,7 +41,7 @@ export const bindResizeHandler = (elements) => {
   window.addEventListener("resize", () => {
     if (!state.interval) {
       resizeCanvas(elements.canvas, state.cellSize);
-      drawScene(elements, state.cells);
+      drawScene(elements, state.cells, state.cellColors);
     } else {
       stop();
       play(elements);

@@ -4,8 +4,12 @@ import { drawScene } from "../../view.js";
 const stampPattern = (elements, { x: mouseX, y: mouseY }, pattern) => {
   const x = Math.floor(mouseX / state.cellSize);
   const y = Math.floor(mouseY / state.cellSize);
-  for (let [dX, dY] of pattern) state.cells.add(`${x + dX}-${y + dY}`);
-  drawScene(elements, state.cells);
+  for (let [dX, dY] of pattern) {
+    const cell = `${x + dX}-${y + dY}`;
+    state.cells.add(cell);
+    state.cellColors.set(cell, state.color);
+  }
+  drawScene(elements, state.cells, state.cellColors);
 };
 
 export const stampBlock = (...args) =>

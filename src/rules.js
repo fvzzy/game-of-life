@@ -1,14 +1,17 @@
+import { blendHexColours } from "./lib/utils.js";
+
+const neighbours = [
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+  [0, 1],
+  [-1, 1],
+  [-1, 0],
+];
+
 const countNeighbours = (cells, gridCols, gridRows, x, y) => {
-  const neighbours = [
-    [-1, -1],
-    [0, -1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-    [0, 1],
-    [-1, 1],
-    [-1, 0],
-  ];
   let count = 0;
   for (const n of neighbours) {
     const [nX, nY] = [x + n[0], y + n[1]];
@@ -30,5 +33,33 @@ export const nextCells = (cells, gridCols, gridRows) => {
       }
     }
   }
+  return result;
+};
+
+const getClusterColors = (cell, cellColors) => {
+  const result = [];
+  const [x, y] = cell.split("-").map(Number);
+
+  for (const n of neighbours) {
+    const [nX, nY] = [x + n[0], y + n[1]];
+    const color = cellColors.get(`${nX}-${nY}`);
+    color && result.push(color);
+  }
+
+  // include the current cell's colour in the calculation
+  cellColors.get(cell) && result.push(cellColors.get(cell));
+
+  return result;
+};
+
+export const nextCellColors = (nextCells, prevColors) => {
+  let result = new Map();
+
+  for (const cell of nextCells) {
+    const clusterColors = getClusterColors(cell, prevColors);
+    const blendedColor = blendHexColours(...clusterColors);
+    result.set(cell, blendedColor);
+  }
+
   return result;
 };

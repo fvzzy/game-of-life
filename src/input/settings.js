@@ -4,7 +4,7 @@ import { play, stop } from "./gameplay.js";
 
 const updateSettingAndRedraw = (option, elements, e) => {
   state[option] = e.target.value;
-  drawScene(elements, state.cells);
+  drawScene(elements, state.cells, state.cellColors);
 };
 
 const updateSpeedAndRestart = (elements, e) => {
@@ -14,11 +14,12 @@ const updateSpeedAndRestart = (elements, e) => {
 };
 
 export const bindOptionControls = (elements) => {
-  const { cellColorInput, cellSizeInput, speedInput } = elements;
+  const { colorInput, cellSizeInput, speedInput } = elements;
 
-  cellColorInput.value = state.cellColor;
-  cellColorInput.addEventListener("input", (e) =>
-    updateSettingAndRedraw("cellColor", elements, e)
+  // TODO: move this into tools
+  colorInput.value = state.color;
+  colorInput.addEventListener("input", (e) =>
+    updateSettingAndRedraw("color", elements, e)
   );
 
   cellSizeInput.value = state.cellSize;

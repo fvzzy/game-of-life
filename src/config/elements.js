@@ -1,5 +1,5 @@
 export default {
-  canvas: document.getElementById("grid"),
+  canvas: document.getElementById("canvas"),
   playButton: document.querySelector("[data-btn-play]"),
   pauseButton: document.querySelector("[data-btn-pause]"),
   stepButton: document.querySelector("[data-btn-step]"),

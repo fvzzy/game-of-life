@@ -19,7 +19,7 @@ export const addTools = (elements, tools) => {
     const wrapperEl = document.createElement("span");
     const inputEl = document.createElement("input");
     const labelEl = document.createElement("label");
-    wrapperEl.classList.add("tool");
+    wrapperEl.classList.add("groupOption");
     inputEl.setAttribute("type", "radio");
     inputEl.setAttribute("name", "tool");
     inputEl.setAttribute("id", toolId);

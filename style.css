@@ -10,21 +10,24 @@ button {
   font-size: inherit;
 }
 
-#grid {
+input[type="range"] {
+  min-width: 100%;
+}
+
+.drawTarget {
   cursor: crosshair;
+}
+
+.controls.loading {
+  display: none;
 }
 
 .controls {
   border: 1px solid lightgray;
   position: absolute;
-  top: 50%;
+  top: 1em;
   left: 1em;
-  transform: translateY(-50%);
   background-color: rgba(255, 255, 255, 0.9);
-}
-
-.controls.loading {
-  display: none;
 }
 
 .controls fieldset {
@@ -32,18 +35,23 @@ button {
   border: 1px solid lightgray;
 }
 
-.gameplay,
-#tools,
-.settings {
+.controlGroup {
   margin: 1em;
 }
 
-.tool,
-.settings label {
+.blockLabel,
+.groupOption {
   display: block;
   margin-top: 0.5em;
+  margin-left: 0;
 }
 
-.tool input {
-  margin-left: 0;
+.visuallyhidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

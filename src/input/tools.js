@@ -33,7 +33,7 @@ const randomiseColor = (elements, state) => {
 };
 
 export const addTools = (elements, state, toolsConfig) => {
-  const { canvas, colorInput, toolsContainer } = elements;
+  const { canvas, toolsContainer } = elements;
   for (const toolId in toolsConfig) {
     const { label } = toolsConfig[toolId];
     const toolGroupEl = createToolGroupEl(toolId, label);
@@ -50,9 +50,6 @@ export const addTools = (elements, state, toolsConfig) => {
       bindTool(canvas, state, event, handler);
     }
   });
-
-  colorInput.value = state.color;
-  colorInput.addEventListener("input", (e) => (state.color = e.target.value));
 
   // preselect the first tool
   toolsContainer.querySelector("input[type='radio']").click();

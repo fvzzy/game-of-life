@@ -4,6 +4,8 @@ export default {
   pauseButton: document.querySelector("[data-btn-pause]"),
   stepButton: document.querySelector("[data-btn-step]"),
   colorInput: document.getElementById("color"),
+  flipShapeXInput: document.getElementById("flipShapeX"),
+  flipShapeYInput: document.getElementById("flipShapeY"),
   toolsContainer: document.getElementById("tools"),
   cellSizeInput: document.getElementById("cellSize"),
   speedInput: document.getElementById("speed"),

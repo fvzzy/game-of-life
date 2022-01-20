@@ -4,6 +4,7 @@ import { resizeCanvas, bindResizeHandler } from "./src/view.js";
 import { bindGameplayControls } from "./src/input/gameplay.js";
 import { bindSettingsControls } from "./src/input/settings.js";
 import { addTools } from "./src/input/tools.js";
+import { bindToolOptions } from "./src/input/tools/options.js";
 import { loadControls } from "./src/input/controls.js";
 import {
   paintbrushDown,
@@ -76,6 +77,7 @@ const initalise = (elements, state) => {
   bindSettingsControls(elements, state);
   bindResizeHandler(elements, state);
   addTools(elements, state, toolsConfig(elements, state));
+  bindToolOptions(elements, state);
   loadControls();
 };
 

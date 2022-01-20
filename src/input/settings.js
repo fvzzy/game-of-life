@@ -16,18 +16,17 @@ export const bindSettingsControls = (elements, state) => {
   const { cellSizeInput, speedInput, randomiseColorsInput } = elements;
 
   cellSizeInput.value = state.cellSize;
-  cellSizeInput.addEventListener("input", (e) =>
-    updateSettingAndRedraw("cellSize", elements, state, e)
-  );
+  cellSizeInput.addEventListener("input", (e) => {
+    updateSettingAndRedraw("cellSize", elements, state, e);
+  });
 
   speedInput.value = state.speed;
-  speedInput.addEventListener("input", (e) =>
-    updateSpeedAndRestart(elements, state, e)
-  );
+  speedInput.addEventListener("input", (e) => {
+    updateSpeedAndRestart(elements, state, e);
+  });
 
   randomiseColorsInput.checked = state.randomiseColors;
-  randomiseColorsInput.addEventListener(
-    "input",
-    (e) => (state.randomiseColors = e.target.checked)
-  );
+  randomiseColorsInput.addEventListener("input", (e) => {
+    state.randomiseColors = e.target.checked;
+  });
 };

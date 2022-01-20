@@ -15,15 +15,30 @@
         <button data-btn-step>Step</button>
       </div>
       <fieldset id="tools" class="controlGroup">
-        <legend>Tool Selection</legend>
-        <label for="color" class="visuallyhidden">Colour</label>
-        <input type="color" id="color" />
+        <legend>Tool</legend>
+      </fieldset>
+      <!-- TODO: generate settings dynamically -->
+      <fieldset id="toolOptions" class="controlGroup">
+        <legend>Tool Options</legend>
+        <span class="labelGroup">
+          <label for="color">Colour</label>
+          <input type="color" id="color" />
+        </span>
+        <span class="labelGroup">
+          <label for="flipShapeX">Flip Shape X</label>
+          <input type="checkbox" id="flipShapeX" />
+        </span>
+        <span class="labelGroup">
+          <label for="flipShapeY">Flip Shape Y</label>
+          <input type="checkbox" id="flipShapeY" />
+        </span>
       </fieldset>
       <fieldset class="controlGroup">
         <legend>Settings</legend>
-        <!-- TODO: generate settings dynamically -->
-        <label for="randomiseColors">Randomise Colours</label>
-        <input type="checkbox" id="randomiseColors" />
+        <span class="labelGroup">
+          <label for="randomiseColors">Randomise Colours</label>
+          <input type="checkbox" id="randomiseColors" />
+        </span>
         <label for="speed" class="blockLabel">Speed</label>
         <input type="range" id="speed" min="1" max="10" step="0.1" />
         <label for="cellSize" class="blockLabel">Cell Size</label>

@@ -1,12 +1,17 @@
 export default function ({
+  // gameplay
   interval,
   prevCells,
   cells,
   cellColors,
   canvasHandlers,
   paused,
+  // tool settings
   dragging,
   color,
+  flipShapeX,
+  flipShapeY,
+  // game settings
   randomiseColors,
   cellSize,
   speed,
@@ -19,6 +24,8 @@ export default function ({
   this.paused = paused;
   this.dragging = dragging;
   this.color = color;
+  this.flipShapeX = flipShapeX;
+  this.flipShapeY = flipShapeY;
   this.randomiseColors = randomiseColors;
   this.cellSize = cellSize;
   this.speed = speed;

@@ -1,9 +1,27 @@
 import { drawScene } from "../../view.js";
 
+const flipPatternY = (pattern, flipY) => {
+  if (!flipY) return pattern;
+  pattern.sort((cellA, cellB) => cellA[0] - cellB[0]);
+  const maxX = pattern[pattern.length - 1][0];
+  return pattern.map((cell) => [-1 * cell[0] + maxX, cell[1]]);
+};
+
+const flipPatternX = (pattern, flipX) => {
+  if (!flipX) return pattern;
+  pattern.sort((cellA, cellB) => cellA[1] - cellB[1]);
+  const maxY = pattern[pattern.length - 1][1];
+  return pattern.map((cell) => [cell[0], -1 * cell[1] + maxY]);
+};
+
 const stampPattern = (elements, state, { x: mouseX, y: mouseY }, pattern) => {
+  const transformedPattern = flipPatternX(
+    flipPatternY(pattern, state.flipShapeY),
+    state.flipShapeX
+  );
   const x = Math.floor(mouseX / state.cellSize);
   const y = Math.floor(mouseY / state.cellSize);
-  for (let [dX, dY] of pattern) {
+  for (let [dX, dY] of transformedPattern) {
     const cell = `${x + dX}-${y + dY}`;
     state.cells.add(cell);
     state.cellColors.set(cell, state.color);

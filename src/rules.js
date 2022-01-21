@@ -13,6 +13,7 @@ const neighbours = [
 
 const countNeighbours = (cells, gridCols, gridRows, x, y) => {
   let count = 0;
+
   for (const n of neighbours) {
     const [nX, nY] = [x + n[0], y + n[1]];
     if (nX < 0 || nX >= gridCols || nY < 0 || nY >= gridRows) continue;
@@ -40,15 +41,12 @@ const getClusterColors = (cell, cellColors) => {
   const result = [];
   const [x, y] = cell.split("-").map(Number);
 
-  for (const n of neighbours) {
+  // include the current cell's colour in the calculation
+  for (const n of [[0, 0], ...neighbours]) {
     const [nX, nY] = [x + n[0], y + n[1]];
     const color = cellColors.get(`${nX}-${nY}`);
     color && result.push(color);
   }
-
-  // include the current cell's colour in the calculation
-  cellColors.get(cell) && result.push(cellColors.get(cell));
-
   return result;
 };
 
@@ -60,6 +58,5 @@ export const nextCellColors = (nextCells, prevColors) => {
     const blendedColor = blendHexColours(...clusterColors);
     result.set(cell, blendedColor);
   }
-
   return result;
 };

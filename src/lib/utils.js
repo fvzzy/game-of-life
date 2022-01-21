@@ -18,7 +18,7 @@ const rgbToHexStr = (rgbVals) => {
   );
 };
 
-export const blendHexColours = (...hexColors) => {
+export const blendHexColors = (...hexColors) => {
   const hexColorsToRgbTotal = hexColors.reduce(
     (result, hexColor) => {
       return hexStrToRgb(hexColor).map(

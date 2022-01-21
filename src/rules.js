@@ -1,4 +1,4 @@
-import { blendHexColours } from "./lib/utils.js";
+import { blendHexColors } from "./lib/utils.js";
 
 const neighbours = [
   [-1, -1],
@@ -55,7 +55,7 @@ export const nextCellColors = (nextCells, prevColors) => {
 
   for (const cell of nextCells) {
     const clusterColors = getClusterColors(cell, prevColors);
-    const blendedColor = blendHexColours(...clusterColors);
+    const blendedColor = blendHexColors(...clusterColors);
     result.set(cell, blendedColor);
   }
   return result;

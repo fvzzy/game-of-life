@@ -10,4 +10,8 @@ export default {
   cellSizeInput: document.getElementById("cellSize"),
   speedInput: document.getElementById("speed"),
   randomiseColorsInput: document.getElementById("randomiseColors"),
+  generationsOutput: document.getElementById("generationsStat"),
+  totalCellsOutput: document.getElementById("totalCellsStat"),
+  liveCellsOutput: document.getElementById("liveCellsStat"),
+  uniqueColorsOutput: document.getElementById("uniqueColorsStat"),
 };

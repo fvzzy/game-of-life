@@ -1,9 +1,16 @@
 import { play, stop } from "./input/gameplay.js";
+import {
+  updateLiveCells,
+  updateTotalCells,
+  updateUniqueColors,
+} from "./stats.js";
 
-export const resizeCanvas = (canvas, cellSize) => {
+export const resizeCanvas = (elements, cellSize) => {
+  const { canvas, totalCellsOutput } = elements;
   const { clientWidth, clientHeight } = document.documentElement;
   canvas.width = Math.floor(clientWidth / cellSize) * cellSize;
   canvas.height = Math.floor(clientHeight / cellSize) * cellSize;
+  updateTotalCells(totalCellsOutput, canvas.width, canvas.height, cellSize);
 };
 
 const resetCanvas = (canvas) => {
@@ -30,16 +37,18 @@ const fillCells = (canvas, cells, colors, size) => {
 };
 
 export const drawScene = (elements, state) => {
-  const { canvas } = elements;
+  const { canvas, liveCellsOutput, uniqueColorsOutput } = elements;
   resetCanvas(canvas);
   fillCells(canvas, state.cells, state.cellColors, state.cellSize);
+  updateLiveCells(liveCellsOutput, state.cells.size);
+  updateUniqueColors(uniqueColorsOutput, state.cellColors);
 };
 
 export const bindResizeHandler = (elements, state) => {
   // restart gameplay to handle window resizes
   window.addEventListener("resize", () => {
     if (!state.interval) {
-      resizeCanvas(elements.canvas, state.cellSize);
+      resizeCanvas(elements, state.cellSize);
       drawScene(elements, state);
     } else {
       stop(state);

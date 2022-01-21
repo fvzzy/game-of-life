@@ -17,7 +17,6 @@
       <fieldset id="tools" class="controlGroup">
         <legend>Tool</legend>
       </fieldset>
-      <!-- TODO: generate settings dynamically -->
       <fieldset id="toolOptions" class="controlGroup">
         <legend>Tool Options</legend>
         <span class="labelGroup">
@@ -43,6 +42,13 @@
         <input type="range" id="speed" min="1" max="10" step="0.1" />
         <label for="cellSize" class="blockLabel">Cell Size</label>
         <input type="range" id="cellSize" min="5" max="30" step="5" />
+      </fieldset>
+      <fieldset class="stats">
+        <legend>Stats</legend>
+        <label id="generationsStat" class="blockLabel"></label>
+        <label id="totalCellsStat" class="blockLabel"></label>
+        <label id="liveCellsStat" class="blockLabel"></label>
+        <label id="uniqueColorsStat" class="blockLabel"></label>
       </fieldset>
     </div>
     <script type="module" src="/main.js"></script>

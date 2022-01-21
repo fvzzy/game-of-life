@@ -60,11 +60,6 @@ const toolsConfig = (elements, state) => {
 };
 
 const state = new Store({
-  interval: null,
-  prevCells: null,
-  cells: new Set(),
-  cellColors: new Map(),
-  canvasHandlers: new Map(),
   color: "#000000",
   randomiseColors: true,
   cellSize: 10,
@@ -72,7 +67,7 @@ const state = new Store({
 });
 
 const initalise = (elements, state) => {
-  resizeCanvas(elements.canvas, state.cellSize);
+  resizeCanvas(elements, state.cellSize);
   bindGameplayControls(elements, state);
   bindSettingsControls(elements, state);
   bindResizeHandler(elements, state);

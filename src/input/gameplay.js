@@ -1,29 +1,30 @@
 import { isEqualSet } from "../lib/utils.js";
 import { nextCells, nextCellColors } from "../rules.js";
 import { resizeCanvas, drawScene } from "../view.js";
-
-export const play = (elements, state) => {
-  const { canvas } = elements;
-  const delay = 500 / state.speed;
-
-  resizeCanvas(canvas, state.cellSize);
-  drawScene(elements, state);
-
-  state.interval = setInterval(() => step(elements, state), delay);
-};
+import { updateGenerations } from "../stats.js";
 
 export const step = (elements, state) => {
-  const { canvas } = elements;
+  const { canvas, generationsOutput, uniqueColorsOutput } = elements;
   const gridCols = canvas.width / state.cellSize;
   const gridRows = canvas.height / state.cellSize;
 
   state.prevCells = state.cells;
   state.cells = nextCells(state.prevCells, gridCols, gridRows);
   state.cellColors = nextCellColors(state.cells, state.cellColors);
+  updateGenerations(generationsOutput, state.generations++);
   drawScene(elements, state);
 
   // kill the program if the game state has reached a standstill
   if (isEqualSet(state.prevCells, state.cells)) stop(state);
+};
+
+export const play = (elements, state) => {
+  const delay = 500 / state.speed;
+
+  resizeCanvas(elements, state.cellSize);
+  drawScene(elements, state);
+
+  state.interval = setInterval(() => step(elements, state), delay);
 };
 
 export const stop = (state) => {

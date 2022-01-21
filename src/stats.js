@@ -15,3 +15,8 @@ export const updateLiveCells = (outputElement, cellCount) => {
 export const updateGenerations = (outputElement, generations) => {
   outputElement.textContent = `${generations} Generations`;
 };
+
+export const updateUniqueColors = (outputElement, cellColors) => {
+  const uniqueColors = new Set(cellColors.values()).size;
+  outputElement.textContent = `${uniqueColors} Unique Colours`;
+};

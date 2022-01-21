@@ -35,7 +35,8 @@ input[type="range"] {
   border: 1px solid lightgray;
 }
 
-.controlGroup {
+.controlGroup,
+.stats {
   margin: 1em;
 }
 

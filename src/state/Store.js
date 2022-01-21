@@ -1,16 +1,19 @@
 export default function ({
   // gameplay
-  interval,
-  prevCells,
-  cells,
-  cellColors,
-  canvasHandlers,
-  paused,
+  interval = null,
+  prevCells = null,
+  cells = new Set(),
+  cellColors = new Map(),
+  canvasHandlers = new Map(),
+  paused = false,
+  generations = 0,
+
   // tool settings
-  dragging,
+  dragging = false,
   color,
-  flipShapeX,
-  flipShapeY,
+  flipHorz = false,
+  flipVert = false,
+
   // game settings
   randomiseColors,
   cellSize,
@@ -22,10 +25,11 @@ export default function ({
   this.cellColors = cellColors;
   this.canvasHandlers = canvasHandlers;
   this.paused = paused;
+  this.generations = generations;
   this.dragging = dragging;
   this.color = color;
-  this.flipShapeX = flipShapeX;
-  this.flipShapeY = flipShapeY;
+  this.flipHorz = flipHorz;
+  this.flipVert = flipVert;
   this.randomiseColors = randomiseColors;
   this.cellSize = cellSize;
   this.speed = speed;

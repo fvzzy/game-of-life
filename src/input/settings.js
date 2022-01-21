@@ -1,5 +1,6 @@
 import { drawScene } from "../view.js";
 import { play, stop } from "./gameplay.js";
+import { updateTotalCells } from "../stats.js";
 
 const updateSettingAndRedraw = (option, elements, state, e) => {
   state[option] = e.target.value;
@@ -13,11 +14,23 @@ const updateSpeedAndRestart = (elements, state, e) => {
 };
 
 export const bindSettingsControls = (elements, state) => {
-  const { cellSizeInput, speedInput, randomiseColorsInput } = elements;
+  const {
+    cellSizeInput,
+    speedInput,
+    randomiseColorsInput,
+    canvas,
+    totalCellsOutput,
+  } = elements;
 
   cellSizeInput.value = state.cellSize;
   cellSizeInput.addEventListener("input", (e) => {
     updateSettingAndRedraw("cellSize", elements, state, e);
+    updateTotalCells(
+      totalCellsOutput,
+      canvas.width,
+      canvas.height,
+      state.cellSize
+    );
   });
 
   speedInput.value = state.speed;

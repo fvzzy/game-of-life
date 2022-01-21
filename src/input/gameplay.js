@@ -23,7 +23,7 @@ export const step = (elements, state) => {
   drawScene(elements, state);
 
   // kill the program if the game state has reached a standstill
-  if (isEqualSet(state.prevCells, state.cells)) stop();
+  if (isEqualSet(state.prevCells, state.cells)) stop(state);
 };
 
 export const stop = (state) => {

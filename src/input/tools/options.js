@@ -1,18 +1,18 @@
 export const bindToolOptions = (elements, state) => {
-  const { colorInput, flipShapeXInput, flipShapeYInput } = elements;
+  const { colorInput, flipHorzInput, flipVertInput } = elements;
 
   colorInput.value = state.color;
   colorInput.addEventListener("input", (e) => {
     state.color = e.target.value;
   });
 
-  flipShapeXInput.checked = state.flipShapeX;
-  flipShapeXInput.addEventListener("input", (e) => {
-    state.flipShapeX = e.target.checked;
+  flipHorzInput.checked = state.flipHorz;
+  flipHorzInput.addEventListener("input", (e) => {
+    state.flipHorz = e.target.checked;
   });
 
-  flipShapeYInput.checked = state.flipShapeY;
-  flipShapeYInput.addEventListener("input", (e) => {
-    state.flipShapeY = e.target.checked;
+  flipVertInput.checked = state.flipVert;
+  flipVertInput.addEventListener("input", (e) => {
+    state.flipVert = e.target.checked;
   });
 };

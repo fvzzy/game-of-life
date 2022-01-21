@@ -16,8 +16,8 @@ const flipPatternX = (pattern, flipX) => {
 
 const stampPattern = (elements, state, { x: mouseX, y: mouseY }, pattern) => {
   const transformedPattern = flipPatternX(
-    flipPatternY(pattern, state.flipShapeY),
-    state.flipShapeX
+    flipPatternY(pattern, state.flipVert),
+    state.flipHorz
   );
   const x = Math.floor(mouseX / state.cellSize);
   const y = Math.floor(mouseY / state.cellSize);

@@ -35,14 +35,22 @@ input[type="range"] {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.controls fieldset {
-  padding: 1em;
-  border: 1px solid lightgray;
-}
-
-.controlGroup,
+.buttonGroup,
+.fieldGroup,
 .stats {
   margin: 1em;
+}
+
+.buttonGroup {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5em;
+}
+
+.fieldGroup,
+.stats {
+  padding: 1em;
+  border: 1px solid lightgray;
 }
 
 .blockLabel,

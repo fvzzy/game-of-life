@@ -4,7 +4,7 @@ import { resizeCanvas, drawScene } from "../view.js";
 import { updateGenerations } from "../stats.js";
 
 export const step = (elements, state) => {
-  const { canvas, generationsOutput, uniqueColorsOutput } = elements;
+  const { canvas, generationsOutput } = elements;
   const gridCols = canvas.width / state.cellSize;
   const gridRows = canvas.height / state.cellSize;
 
